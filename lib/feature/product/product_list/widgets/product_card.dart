@@ -11,9 +11,10 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({Key? key, required this.product}) : super(key: key);
 
+  // Format price with 3-digit separator and Persian locale
   String formatPrice(int price) {
     final formatter = NumberFormat('#,###', 'fa');
-    return '${formatter.format(price)} تومان';
+    return '${formatter.format(price)} ریال';
   }
 
   @override
@@ -53,7 +54,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 28),
                     Text(
-                      formatPrice(product.price),
+                      formatPrice(product.price), // 👈 formatted price
                       style: const TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w900,

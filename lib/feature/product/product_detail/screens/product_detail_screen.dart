@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../controller/product_detail_controller.dart';
+import 'dart:ui' as ui;
 
 class ProductDetailScreen extends StatelessWidget {
   final int productId;
 
-  const ProductDetailScreen({super.key, required this.productId});
+  ProductDetailScreen({super.key, required this.productId});
+  String formatPrice(int price) {
+    final formatter = NumberFormat('#,###', 'fa');
+    return '${formatter.format(price)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +24,22 @@ class ProductDetailScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F0F0),
-      appBar: AppBar(title: const Text('جزئیات محصول'), centerTitle: true),
+      backgroundColor: Color(0xFFF0F0F0),
+      appBar: AppBar(title: Text('جزئیات محصول'), centerTitle: true),
       body: controller.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : controller.hasError
-          ? const Center(child: Text('خطا در دریافت اطلاعات'))
+          ? Center(child: Text('خطا در دریافت اطلاعات'))
           : controller.product == null
-          ? const Center(child: Text('محصولی یافت نشد'))
+          ? Center(child: Text('محصولی یافت نشد'))
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Container(
                     color: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -48,49 +51,49 @@ class ProductDetailScreen extends StatelessWidget {
                             width: 220,
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) =>
-                                const Icon(Icons.image, size: 60),
+                                Icon(Icons.image, size: 60),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Text(
                           controller.product!.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
-                          textDirection: TextDirection.rtl,
+                          textDirection: ui.TextDirection.rtl,
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
                         Text(
-                          '${controller.product!.price} تومان',
-                          style: const TextStyle(
+                          '${formatPrice(controller.product!.price)} ریال',
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
-                          textDirection: TextDirection.rtl,
+                          textDirection: ui.TextDirection.rtl,
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.local_shipping,
                               size: 18,
                               color: Colors.green,
                             ),
-                            const SizedBox(width: 4),
-                            const Text(
+                            SizedBox(width: 4),
+                            Text(
                               'ارسال سریع دیجی‌کالا',
                               style: TextStyle(
                                 color: Colors.green,
                                 fontSize: 13,
                               ),
-                              textDirection: TextDirection.rtl,
+                              textDirection: ui.TextDirection.rtl,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -106,43 +109,43 @@ class ProductDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
+                        Text(
                           'ویژگی‌های برجسته:',
 
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
-                          textDirection: TextDirection.rtl,
+                          textDirection: ui.TextDirection.rtl,
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         ...controller.product!.shortSpecifications.map(
                           (spec) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            padding: EdgeInsets.symmetric(vertical: 4),
                             child: Text(
                               '• $spec',
-                              style: const TextStyle(fontSize: 13),
-                              textDirection: TextDirection.rtl,
+                              style: TextStyle(fontSize: 13),
+                              textDirection: ui.TextDirection.rtl,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 80),
+                  SizedBox(height: 80),
                 ],
               ),
             ),
       bottomNavigationBar: controller.product != null
           ? Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               color: Colors.white,
               child: ElevatedButton(
                 onPressed: () {
@@ -150,11 +153,15 @@ class ProductDetailScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text(
+                child: Text(
                   'افزودن به سبد خرید',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             )
@@ -168,15 +175,15 @@ class ProductDetailScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-          textDirection: TextDirection.rtl,
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+          textDirection: ui.TextDirection.rtl,
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(fontSize: 13),
+          style: TextStyle(fontSize: 13),
           overflow: TextOverflow.ellipsis,
-          textDirection: TextDirection.rtl,
+          textDirection: ui.TextDirection.rtl,
         ),
       ],
     );
@@ -189,18 +196,18 @@ class ProductDetailScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-          textDirection: TextDirection.rtl,
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+          textDirection: ui.TextDirection.rtl,
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Row(
           children: [
             CircleAvatar(backgroundColor: color, radius: 6),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             Text(
               name,
-              style: const TextStyle(fontSize: 13),
-              textDirection: TextDirection.rtl,
+              style: TextStyle(fontSize: 13),
+              textDirection: ui.TextDirection.rtl,
             ),
           ],
         ),

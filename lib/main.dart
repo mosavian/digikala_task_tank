@@ -12,7 +12,7 @@ void main() {
           create: (_) => ProductListController(repository: ProductRepository()),
         ),
       ],
-      child: const Application(),
+      child: Application(),
     ),
   );
 }
